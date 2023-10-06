@@ -27,8 +27,7 @@ func main() {
     }
 
     // start a go routine for non-blocking request handling
-
-    e.Start(":5001")
+    e.Start(":8080")
 }
 
 // Custom echo request error handler

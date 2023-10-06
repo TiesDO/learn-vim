@@ -1,14 +1,141 @@
 {{ define "index" }}
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title></title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="css/style.css" rel="stylesheet">
-    </head>
-    <body>
-        <h1>Hello {{.}}!</h1>
-    </body>
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://fonts.cdnfonts.com/css/ibm-plex-mono-3" rel="stylesheet">
+    <script src="https://unpkg.com/htmx.org@1.9.6"
+        integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni"
+        crossorigin="anonymous"></script>
+
+    <style>
+        html {
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        #vim {
+            position: relative;
+            width: min-content;
+            height: min-content;
+        }
+
+        ::-moz-selection {
+            /* Code for Firefox */
+            color: black;
+            background: white;
+        }
+
+        ::selection {
+            color: black;
+            background: white;
+        }
+
+        .prevent-select {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        #vim textarea {
+            font-size: 1.4rem;
+            resize: none;
+            color: #eee;
+            background-color: #181818;
+        }
+
+        #vim #overlay {
+            background: transparent;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="vim">
+        <textarea id="vtext" rows="20" cols="50">This is some dummy text for you to manipulate
+
+Now we introduce columns, use H J K and L to move the cursor</textarea>
+        <div id="overlay"></div>
+    </div>
+
+    <p id="mode">NO FOCUS</p>
+
+    <script type="text/javascript">
+        var vim = document.getElementById("vim");
+        var textarea = document.getElementById("vtext");
+        var mode = document.getElementById("mode");
+        var cursor = {col: 0, row: 0};
+
+        vim.addEventListener("click", function (e) {
+            mode.innerHTML = "NORMAL";
+        });
+
+        document.addEventListener("keydown", function (e) {
+            if (e.key == "i" && mode.innerHTML == "NORMAL") {
+                mode.innerHTML = "INSERT";
+            }
+
+            if (mode.innerHTML == "NORMAL") {
+                switch (e.key) {
+                    case "h":
+                        moveCursor(-1, 0);
+                        break;
+                    case "j":
+                        moveCursor(0, 1);
+                        break;
+                    case "k":
+                        moveCursor(0, -1);
+                        break;
+                    case "l":
+                        moveCursor(1, 0);
+                        break;
+                }
+            }
+
+            if (e.key == "Escape") {
+                mode.innerHTML = "NO FOCUS";
+            }
+
+            e.preventDefault();
+        });
+
+        function moveCursor(col, row) {
+            if (cursor.col == 0 && col < 0) {
+                col = 0;
+            }
+
+            if (cursor.row == 0 && row < 0) {
+                row = 0;
+            }
+
+            setCursor(cursor.col + col, cursor.row + row);
+        }
+
+        function setCursor(col, row) {
+            cursor.col = col;
+            cursor.row = row;
+
+            console.log("cursor", cursor);
+
+            console.log("textarea", textarea.setSelectionRange);
+            textarea.focus();
+            textarea.setSelectionRange(cursor.col, cursor.col + 1);
+        }
+    </script>
+</body>
+
 </html>
 {{ end }}

@@ -9,7 +9,7 @@ import (
 )
 
 func Setup(e *echo.Echo) error {
-    // load our html templates
+    // load html templates
     template := template.Must(template.ParseFiles("web/templates/index.html"))
 
     e.Renderer = &Template{
@@ -17,7 +17,11 @@ func Setup(e *echo.Echo) error {
     }
 
     e.GET("/", func(c echo.Context) error {
-        return c.Render(http.StatusOK, "index", "Ties")
+        return c.Render(http.StatusOK, "index", "Test")
+    })
+
+    e.GET("/name", func(c echo.Context) error {
+        return c.String(http.StatusOK, "Hello, HTMX!")
     })
 
     return nil
