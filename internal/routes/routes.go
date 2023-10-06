@@ -24,6 +24,8 @@ func Setup(e *echo.Echo) error {
         return c.String(http.StatusOK, "Hello, HTMX!")
     })
 
+    e.File("/assets/js/editor.js", "web/assets/js/editor.js")
+
     return nil
 }
 
