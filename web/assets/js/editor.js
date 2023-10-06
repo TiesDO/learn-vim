@@ -1,25 +1,35 @@
 const UI = document.getElementById('vtext')
 
+const KEYMAP = {
+    'h': () => moveHorizontal(-1),
+    'j': () => moveVertical(1),
+    'k': () => moveVertical(-1),
+    'l': () => moveHorizontal(1),
+}
+
+const KEYROUTES = Object.keys(KEYMAP)
+
+let keyBuffer = ''
+
 document.addEventListener('keydown', (event) => {
+    // TODO: create a map switcher, ie in normal mode i = insert mode, but in visual mode i = inside
     event.preventDefault()
 
-    switch (event.key) {
-        case 'h':
-            moveHorizontal(-1)
-            break
-        case 'j':
-            moveVertical(1)
-            break
-        case 'k':
-            moveVertical(-1)
-            break
-        case 'l':
-            moveHorizontal(1)
-            break
-        case 'i':
-            updateUICursor()
-            break
+    keyBuffer += event.key
+    const matches = KEYROUTES.filter((key) => key.startsWith(keyBuffer))
+
+    if (matches.length === 0) {
+        keyBuffer = ''
+        return
     }
+
+    if (matches.length === 1 && matches[0] === keyBuffer) {
+        KEYMAP[matches]()
+        keyBuffer = ''
+        return
+    }
+
+    // TODO: set timeout to clear keyBuffer
 })
 
 const CURSOR = {
