@@ -67,74 +67,15 @@
     <div id="vim">
         <textarea id="vtext" rows="20" cols="50">This is some dummy text for you to manipulate
 
-Now we introduce columns, use H J K and L to move the cursor</textarea>
+Now we introduce columns,
+
+use H J K and L to move the cursor</textarea>
         <div id="overlay"></div>
     </div>
 
     <p id="mode">NO FOCUS</p>
 
-    <script type="text/javascript">
-        var vim = document.getElementById("vim");
-        var textarea = document.getElementById("vtext");
-        var mode = document.getElementById("mode");
-        var cursor = {col: 0, row: 0};
-
-        vim.addEventListener("click", function (e) {
-            mode.innerHTML = "NORMAL";
-        });
-
-        document.addEventListener("keydown", function (e) {
-            if (e.key == "i" && mode.innerHTML == "NORMAL") {
-                mode.innerHTML = "INSERT";
-            }
-
-            if (mode.innerHTML == "NORMAL") {
-                switch (e.key) {
-                    case "h":
-                        moveCursor(-1, 0);
-                        break;
-                    case "j":
-                        moveCursor(0, 1);
-                        break;
-                    case "k":
-                        moveCursor(0, -1);
-                        break;
-                    case "l":
-                        moveCursor(1, 0);
-                        break;
-                }
-            }
-
-            if (e.key == "Escape") {
-                mode.innerHTML = "NO FOCUS";
-            }
-
-            e.preventDefault();
-        });
-
-        function moveCursor(col, row) {
-            if (cursor.col == 0 && col < 0) {
-                col = 0;
-            }
-
-            if (cursor.row == 0 && row < 0) {
-                row = 0;
-            }
-
-            setCursor(cursor.col + col, cursor.row + row);
-        }
-
-        function setCursor(col, row) {
-            cursor.col = col;
-            cursor.row = row;
-
-            console.log("cursor", cursor);
-
-            console.log("textarea", textarea.setSelectionRange);
-            textarea.focus();
-            textarea.setSelectionRange(cursor.col, cursor.col + 1);
-        }
-    </script>
+    <script src="assets/js/editor.js"></script>
 </body>
 
 </html>
